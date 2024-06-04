@@ -4,13 +4,23 @@ import webbrowser
 import time
 import playsound
 import os
-from gTTS import gTTS
+from gtts import gTTS
 import random
-import urllib.parse  
-
+import urllib 
 
 r = sr.Recognizer()
 
+
+def kyoyu_speak(audio_string):
+    tts = gTTS(text=audio_string, lang='en')
+    r = random.randint(1, 10000000)
+    audio_file = 'audio-' + str(r) + '.mp3'
+    tts.save(audio_file)
+    playsound.playsound(audio_file)
+    kyoyu_speak(audio_string)
+    os.remove(audio_file)
+    
+    
 def record_audio(ask=False):
     with sr.Microphone() as source:
         if ask:
@@ -26,14 +36,7 @@ def record_audio(ask=False):
             kyoyu_speak('Sorry, my speech service is down')
         return voice_data
 
-def kyoyu_speak(audio_string):
-    tts = gTTS(text=audio_string, lang='en')
-    r = random.randint(1, 10000000)
-    audio_file = 'audio-' + str(r) + '.mp3'
-    tts.save(audio_file)
-    playsound.playsound(audio_file)
-    print(audio_string)
-    os.remove(audio_file)
+
 
 def respond(voice_data):
     if 'what is your name' in voice_data:
@@ -59,6 +62,6 @@ def respond(voice_data):
 time.sleep(1)
 kyoyu_speak("How can I help you, cutie?")
 
-while True:
+while 1:
     voice_data = record_audio()
     respond(voice_data)
